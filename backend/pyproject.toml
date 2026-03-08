@@ -1,0 +1,20 @@
+[project]
+name = "iot-monitoring-backend"
+version = "0.1.0"
+description = "IoT 환경 데이터 모니터링 시스템 백엔드"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "apscheduler>=3.10.0",
+    "python-dateutil>=2.9.0",
+    "aiosqlite>=0.20.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
