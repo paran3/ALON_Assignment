@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-from app.models import SensorMode
+from app.models import SensorMode, SensorStatus, TaskStatus
 
 
 # --- Utility ---
@@ -67,7 +67,7 @@ class SensorDataOut(BaseModel):
     serial_number: str
     timestamp: str
     server_received_at: str
-    mode: str
+    mode: SensorMode
     metrics: MetricsOut
     location: LocationOut
 
@@ -89,8 +89,8 @@ class SensorDataListOut(BaseModel):
 
 class SensorOut(BaseModel):
     serial_number: str
-    mode: str
-    status: str
+    mode: SensorMode
+    status: SensorStatus
     last_received_at: str | None
     latitude: float
     longitude: float
@@ -105,7 +105,7 @@ class SensorListOut(BaseModel):
 
 class TaskStatusOut(BaseModel):
     id: str
-    status: str
+    status: TaskStatus
     total_count: int
     processed_count: int
     error_message: str | None

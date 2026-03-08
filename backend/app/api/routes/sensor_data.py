@@ -29,6 +29,9 @@ async def receive_sensor_data(
     db: AsyncSession = Depends(get_db),
 ):
     items = payload if isinstance(payload, list) else [payload]
+    if not items:
+        return TaskAccepted(task_id="", message="No data to process")
+
     task_id = str(uuid.uuid4())
 
     await create_background_task(db, task_id, total_count=len(items))

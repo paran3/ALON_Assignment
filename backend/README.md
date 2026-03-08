@@ -16,4 +16,21 @@
 - API 호출 없이도 고장 센서를 놓치지 않기 위한 백그라운드 검사
 
 ## 실행 방법
-> 추후 작성
+
+### 로컬
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+### Docker
+
+```bash
+cd backend
+docker build -t iot-backend .
+docker run -p 8000:8000 iot-backend
+```
+
+API 문서: http://localhost:8000/docs

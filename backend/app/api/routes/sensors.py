@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -46,7 +46,7 @@ async def register_sensor(
     if existing is not None:
         raise SensorAlreadyExistsError(body.serial_number)
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     sensor = Sensor(
         serial_number=body.serial_number,

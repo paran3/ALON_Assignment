@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -84,7 +84,7 @@ async def update_sensor_mode(
     if sensor is None:
         return None
     sensor.mode = mode
-    sensor.updated_at = datetime.utcnow()
+    sensor.updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
     await db.flush()
     return sensor
 
@@ -122,7 +122,7 @@ async def create_background_task(
         status=TaskStatus.PENDING.value,
         total_count=total_count,
         processed_count=0,
-        created_at=datetime.utcnow(),
+        created_at=datetime.now(timezone.utc).replace(tzinfo=None),
     )
     db.add(task)
     await db.commit()

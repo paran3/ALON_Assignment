@@ -17,6 +17,10 @@ from app.schemas import SensorDataIn
 logger = logging.getLogger(__name__)
 
 
+def _utc_now() -> datetime:
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
 def parse_timestamp_to_utc(timestamp_str: str) -> datetime:
     dt = dateutil_parser.isoparse(timestamp_str)
     if dt.tzinfo is not None:
@@ -30,7 +34,7 @@ async def process_sensor_data(task_id: str, items: list[SensorDataIn]) -> None:
             await update_task_status(
                 db, task_id, status=TaskStatus.PROCESSING.value
             )
-            now = datetime.utcnow()
+            now = _utc_now()
             processed = 0
             errors: list[str] = []
 
@@ -57,7 +61,7 @@ async def process_sensor_data(task_id: str, items: list[SensorDataIn]) -> None:
                     )
                     await create_sensor_data(db, sensor_data)
 
-                    await update_sensor_on_data(
+                    updated = await update_sensor_on_data(
                         db,
                         serial_number=item.serial_number,
                         mode=item.mode.value,
@@ -65,6 +69,9 @@ async def process_sensor_data(task_id: str, items: list[SensorDataIn]) -> None:
                         longitude=item.location.lng,
                         received_at=now,
                     )
+                    if updated is None:
+                        raise UnregisteredSensorError(item.serial_number)
+
                     processed += 1
                 except UnregisteredSensorError as e:
                     errors.append(str(e))
@@ -83,7 +90,7 @@ async def process_sensor_data(task_id: str, items: list[SensorDataIn]) -> None:
                 status=TaskStatus.COMPLETED.value,
                 processed_count=processed,
                 error_message=error_msg,
-                completed_at=datetime.utcnow(),
+                completed_at=_utc_now(),
             )
         except Exception as e:
             logger.exception("Task %s failed", task_id)
@@ -92,5 +99,5 @@ async def process_sensor_data(task_id: str, items: list[SensorDataIn]) -> None:
                 task_id,
                 status=TaskStatus.FAILED.value,
                 error_message=str(e),
-                completed_at=datetime.utcnow(),
+                completed_at=_utc_now(),
             )
