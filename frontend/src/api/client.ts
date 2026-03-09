@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "https://43-202-239-14.nip.io";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://alon-iot.duckdns.org";
 
 export async function apiFetch<T>(
   path: string,
