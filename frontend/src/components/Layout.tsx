@@ -7,7 +7,7 @@ export function Layout() {
   return (
     <div className="container">
       <header className="header">
-        <h1>IoT 모니터링</h1>
+        <h1>IoT 환경 모니터링</h1>
         <button
           className="theme-toggle"
           onClick={toggleTheme}

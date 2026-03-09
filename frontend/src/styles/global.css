@@ -1,3 +1,5 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
 *,
 *::before,
 *::after {
@@ -12,15 +14,17 @@
   --text: #1a1a1a;
   --text-secondary: #666666;
   --border: #e0e0e0;
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
+  --primary: #007e57;
+  --primary-hover: #006647;
+  --accent: #00a86b;
   --success: #16a34a;
   --danger: #dc2626;
   --warning: #f59e0b;
   --card-bg: #ffffff;
   --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
   --radius: 8px;
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 [data-theme="dark"] {
@@ -29,13 +33,15 @@
   --text: #e5e5e5;
   --text-secondary: #999999;
   --border: #2a2a2a;
-  --primary: #3b82f6;
-  --primary-hover: #60a5fa;
+  --primary: #00a86b;
+  --primary-hover: #00c77b;
+  --accent: #00d68f;
   --success: #22c55e;
   --danger: #ef4444;
   --warning: #fbbf24;
   --card-bg: #1a1a1a;
   --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 body {
@@ -54,6 +60,7 @@ a {
 button {
   cursor: pointer;
   font-family: inherit;
+  touch-action: manipulation;
 }
 
 button:focus-visible,
@@ -137,6 +144,85 @@ select {
   border-radius: var(--radius);
   padding: 16px;
   box-shadow: var(--card-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.card-clickable {
+  cursor: pointer;
+}
+
+.card-clickable:hover {
+  border-color: var(--primary);
+}
+
+/* Card status bar */
+.card-status-healthy {
+  border-left: 4px solid var(--accent);
+}
+
+.card-status-missing {
+  border-left: 4px solid var(--danger);
+}
+
+/* Summary stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.stat-card .stat-icon {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.stat-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-card .stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.stat-card-healthy {
+  border-bottom: 3px solid var(--success);
+}
+
+.stat-card-missing {
+  border-bottom: 3px solid var(--danger);
+}
+
+.stat-card-emergency {
+  border-bottom: 3px solid var(--warning);
 }
 
 /* Table */
@@ -162,6 +248,10 @@ th {
   font-weight: 600;
   color: var(--text-secondary);
   font-size: 0.8rem;
+}
+
+tr:hover {
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
 }
 
 /* Status badge */
@@ -204,6 +294,7 @@ th {
   background: var(--bg-secondary);
   color: var(--text);
   font-size: 0.825rem;
+  touch-action: manipulation;
   transition: background 0.15s, border-color 0.15s;
 }
 
@@ -300,6 +391,33 @@ th {
   font-size: 0.85rem;
 }
 
+/* Mobile filter toggle */
+.filter-collapse-btn {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-secondary);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  width: 100%;
+  justify-content: center;
+  touch-action: manipulation;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.filter-collapse-btn:hover {
+  border-color: var(--primary);
+}
+
+.filters-container.collapsed .filters,
+.filters-container.collapsed .filter-fieldset {
+  display: none;
+}
+
 /* Pagination */
 .pagination {
   display: flex;
@@ -379,6 +497,78 @@ th {
 
 .error-message {
   color: var(--danger);
+}
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    color-mix(in srgb, var(--bg-secondary) 60%, var(--border)) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: var(--radius);
+}
+
+.skeleton-card {
+  height: 160px;
+}
+
+.skeleton-row {
+  height: 40px;
+  margin-bottom: 8px;
+}
+
+/* Page transition */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-state .empty-state-icon {
+  font-size: 3rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state p,
+.empty-state .empty-message {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 320px;
+  line-height: 1.6;
 }
 
 /* DatePicker */
@@ -476,8 +666,23 @@ th {
   display: none;
 }
 
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
+  .filter-collapse-btn {
+    display: inline-flex;
+  }
+
   .filters {
     flex-direction: column;
   }

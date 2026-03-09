@@ -16,7 +16,12 @@ interface DataTableProps {
 
 export function DataTable({ data }: DataTableProps) {
   if (!data.length) {
-    return <div className="loading">조회된 데이터가 없습니다</div>;
+    return (
+      <div className="empty-state">
+        <div className="empty-state-icon">📊</div>
+        <p>조회된 데이터가 없습니다</p>
+      </div>
+    );
   }
 
   return (
@@ -47,9 +52,9 @@ export function DataTable({ data }: DataTableProps) {
                   {MODE_LABEL[d.mode] ?? d.mode}
                 </span>
               </td>
-              <td>{d.metrics.temperature.toFixed(1)}</td>
-              <td>{d.metrics.humidity.toFixed(1)}</td>
-              <td>{d.metrics.pressure.toFixed(1)}</td>
+              <td>{d.metrics.temperature.toFixed(1)}°C</td>
+              <td>{d.metrics.humidity.toFixed(1)}%</td>
+              <td>{d.metrics.pressure.toFixed(1)} hPa</td>
               <td>{d.metrics.air_quality}</td>
             </tr>
           ))}

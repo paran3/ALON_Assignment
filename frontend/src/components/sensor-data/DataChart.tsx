@@ -17,7 +17,12 @@ interface DataChartProps {
 
 export function DataChart({ data }: DataChartProps) {
   if (!data.length) {
-    return <div className="loading">차트에 표시할 데이터가 없습니다</div>;
+    return (
+      <div className="empty-state">
+        <div className="empty-state-icon">📈</div>
+        <p>차트에 표시할 데이터가 없습니다</p>
+      </div>
+    );
   }
 
   const chartData = [...data]

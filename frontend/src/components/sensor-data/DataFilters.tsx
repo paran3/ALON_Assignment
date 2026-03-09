@@ -1,3 +1,4 @@
+import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { SensorMode } from "../../types/api";
@@ -21,6 +22,7 @@ function fromDate(date: Date | null): string | undefined {
 }
 
 export function DataFilters({ filters, onChange }: DataFiltersProps) {
+  const [collapsed, setCollapsed] = useState(false);
   const { data: sensorsData } = useSensors();
   const sensors = sensorsData?.data || [];
 
@@ -39,7 +41,14 @@ export function DataFilters({ filters, onChange }: DataFiltersProps) {
     filters.created_at_to;
 
   return (
-    <div className="filters-container">
+    <div className={`filters-container ${collapsed ? "collapsed" : ""}`}>
+      <button
+        className="btn btn-sm filter-collapse-btn"
+        onClick={() => setCollapsed((c) => !c)}
+        aria-label={collapsed ? "필터 펼치기" : "필터 접기"}
+      >
+        {collapsed ? "▼ 필터 펼치기" : "▲ 필터 접기"}
+      </button>
       <div className="filters">
         <div className="filter-group">
           <label htmlFor="filter-sensor">센서</label>

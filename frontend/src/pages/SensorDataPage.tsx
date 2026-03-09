@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useSensorData } from "../hooks/useSensorData";
 import { DataFilters } from "../components/sensor-data/DataFilters";
 import { DataTable } from "../components/sensor-data/DataTable";
@@ -11,15 +12,19 @@ type ViewMode = "table" | "chart";
 const LIMIT_OPTIONS = [10, 20, 50, 100];
 
 export function SensorDataPage() {
+  const [searchParams] = useSearchParams();
+  const initialSerial = searchParams.get("serial_number") || undefined;
+
   const [filters, setFilters] = useState<SensorDataFilters>({
     page: 1,
     limit: 10,
+    serial_number: initialSerial,
   });
   const [view, setView] = useState<ViewMode>("table");
   const { data, isLoading, error } = useSensorData(filters);
 
   return (
-    <div>
+    <div className="page-enter">
       <h2 style={{ fontSize: "1.1rem", fontWeight: 600, marginBottom: 16 }}>
         측정 데이터
       </h2>
@@ -58,7 +63,11 @@ export function SensorDataPage() {
       </div>
 
       {isLoading ? (
-        <div className="loading">데이터를 불러오는 중…</div>
+        <div>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="skeleton skeleton-row" />
+          ))}
+        </div>
       ) : error ? (
         <div className="error-message">데이터를 불러오지 못했습니다</div>
       ) : data ? (
