@@ -41,7 +41,26 @@ docker run -e BACKEND_URL=http://host.docker.internal:8000 -p 8001:8001 iot-sens
 
 프로젝트 루트에서:
 ```bash
+# 첫 실행 또는 코드 변경 후 재빌드 + 실행
 docker compose up --build
+
+# 백그라운드 실행
+docker compose up --build -d
+
+# 이미 빌드된 이미지로 실행 (코드 변경 없을 때)
+docker compose up
+
+# 로그 확인 (백그라운드 실행 시)
+docker compose logs -f
+
+# 특정 서비스 로그만 확인
+docker compose logs -f sensor
+
+# 중지
+docker compose down
+
+# 중지 + 볼륨 삭제 (DB 초기화)
+docker compose down -v
 ```
 - 백엔드와 센서 간 네트워크 자동 구성, 환경변수 자동 설정
 
@@ -49,7 +68,7 @@ docker compose up --build
 
 | 변수 | 기본값 | 설명 |
 |------|--------|------|
-| `BACKEND_URL` | `http://127.0.0.1:8000` | 백엔드 서버 주소 |
+| `BACKEND_URL` | `http://backend:8000` | 백엔드 서버 주소 |
 | `SENSOR_PORT` | `8001` | 시뮬레이터 포트 |
 | `NORMAL_INTERVAL` | `600` | NORMAL 모드 전송 주기 (초) |
 | `EMERGENCY_INTERVAL` | `10` | EMERGENCY 모드 전송 주기 (초) |

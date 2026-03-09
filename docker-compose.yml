@@ -1,16 +1,24 @@
 services:
   backend:
     build: ./backend
+    command: sh -c "rm -f iot_monitoring.db && uvicorn app.main:app --host 0.0.0.0 --port 8000"
     environment:
       SENSOR_SIMULATOR_URL: http://sensor:8001
     ports:
       - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   sensor:
     build: ./sensor
     environment:
       BACKEND_URL: http://backend:8000
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
       - "8001:8001"

@@ -20,7 +20,7 @@
 | 변수 | 기본값 | 설명 |
 |------|--------|------|
 | `DATABASE_URL` | `sqlite+aiosqlite:///./iot_monitoring.db` | DB 접속 URL |
-| `SENSOR_SIMULATOR_URL` | (빈 문자열) | 센서 시뮬레이터 URL (설정 시 모드 변경 양방향 동기화) |
+| `SENSOR_SIMULATOR_URL` | `http://sensor:8001` | 센서 시뮬레이터 URL (설정 시 모드 변경 양방향 동기화) |
 
 ## 실행 방법
 
@@ -44,7 +44,26 @@ docker run -p 8000:8000 iot-backend
 
 프로젝트 루트에서:
 ```bash
+# 첫 실행 또는 코드 변경 후 재빌드 + 실행
 docker compose up --build
+
+# 백그라운드 실행
+docker compose up --build -d
+
+# 이미 빌드된 이미지로 실행 (코드 변경 없을 때)
+docker compose up
+
+# 로그 확인 (백그라운드 실행 시)
+docker compose logs -f
+
+# 특정 서비스 로그만 확인
+docker compose logs -f backend
+
+# 중지
+docker compose down
+
+# 중지 + 볼륨 삭제 (DB 초기화)
+docker compose down -v
 ```
 - 백엔드: http://localhost:8000
 - 센서 시뮬레이터: http://localhost:8001

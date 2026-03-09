@@ -86,6 +86,7 @@ backend/
 - `GET /api/v1/sensors` — 전체 센서 목록 + 상태
 - `GET /api/v1/sensors/{serial_number}` — 단일 센서 상세
 - `PATCH /api/v1/sensors/{serial_number}/mode` — 모드 변경 (NORMAL ↔ EMERGENCY), 센서 시뮬레이터 동기화
+- `PATCH /api/v1/sensors/{serial_number}/broken` — 고장 시뮬레이션 (센서 시뮬레이터로 프록시)
 
 ### 태스크 조회
 - `GET /api/v1/tasks/{task_id}` — 백그라운드 태스크 상태 조회
@@ -115,6 +116,12 @@ backend/
 - 모드 변경 시 센서 시뮬레이터(`SENSOR_SIMULATOR_URL`)에 httpx로 동기화
 - `SENSOR_SIMULATOR_URL`이 빈 문자열이면 동기화 비활성 (기본값)
 - 동기화 실패해도 백엔드 동작에 영향 없음 (fire-and-forget, 경고 로그만 기록)
+- 고장 시뮬레이션: 프론트엔드 → 백엔드 → 센서 시뮬레이터 프록시 (`PATCH /sensors/{sn}/broken`)
+
+### 6. 벌크 데이터 전송
+- 각 센서가 독립적으로 여러 건의 측정 데이터를 모아서 배열로 한 번에 전송
+- 센서 시뮬레이터에서 BULK_COUNT 설정에 따라 N건씩 모아 전송
+- 백엔드는 단일/배열 모두 동일한 `POST /api/v1/sensor-data` 엔드포인트로 수신
 
 ## 주요 라이브러리
 - fastapi, uvicorn
@@ -133,3 +140,5 @@ backend/
 6. 타임존 혼재 데이터 → UTC 정규화 확인
 7. 데이터 미전송 → 센서 상태 MISSING 전환 확인
 8. 모드 변경 → 센서 시뮬레이터 동기화 확인 (SENSOR_SIMULATOR_URL 설정 시)
+9. 고장 시뮬레이션 → 센서 시뮬레이터 프록시 동작 확인
+10. 벌크(배열) 데이터 전송 → 백그라운드 태스크 정상 처리 확인
