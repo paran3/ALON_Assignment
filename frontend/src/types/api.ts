@@ -14,6 +14,7 @@ export interface Sensor {
   serial_number: string;
   mode: SensorMode;
   status: SensorStatus;
+  broken: boolean;
   last_received_at: string | null;
   latitude: number;
   longitude: number;

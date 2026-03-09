@@ -283,6 +283,17 @@ tr:hover {
   color: var(--warning);
 }
 
+.badge-broken {
+  background: color-mix(in srgb, var(--danger) 15%, transparent);
+  color: var(--danger);
+}
+
+.badge-bulk {
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
+  color: var(--primary);
+  font-size: 0.7rem;
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
@@ -315,6 +326,26 @@ tr:hover {
 .btn-sm {
   padding: 4px 10px;
   font-size: 0.75rem;
+}
+
+.btn-broken {
+  border-color: var(--text-secondary);
+  color: var(--text-secondary);
+}
+
+.btn-broken:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-broken-active {
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-broken-active:hover {
+  background: color-mix(in srgb, var(--danger) 20%, transparent);
 }
 
 /* Filters */

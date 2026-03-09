@@ -8,14 +8,15 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { format } from "date-fns";
 import type { SensorData } from "../../types/api";
+import { useTimezone } from "../TimezoneProvider";
 
 interface DataChartProps {
   data: SensorData[];
 }
 
 export function DataChart({ data }: DataChartProps) {
+  const { timezone } = useTimezone();
   if (!data.length) {
     return (
       <div className="empty-state">
@@ -28,7 +29,14 @@ export function DataChart({ data }: DataChartProps) {
   const chartData = [...data]
     .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
     .map((d) => ({
-      time: format(new Date(d.timestamp), "MM/dd HH:mm"),
+      time: new Date(d.timestamp).toLocaleString("ko-KR", {
+        timeZone: timezone,
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }),
       temperature: d.metrics.temperature,
       humidity: d.metrics.humidity,
       pressure: d.metrics.pressure,

@@ -1,20 +1,18 @@
-import { format } from "date-fns";
 import type { SensorData } from "../../types/api";
+import { useTimezone } from "../TimezoneProvider";
+import { formatInTimezone } from "../../utils/formatTime";
 
 const MODE_LABEL: Record<string, string> = {
   NORMAL: "일반",
   EMERGENCY: "긴급",
 };
 
-function formatLocal(utc: string): string {
-  return format(new Date(utc), "yyyy-MM-dd HH:mm:ss");
-}
-
 interface DataTableProps {
   data: SensorData[];
 }
 
 export function DataTable({ data }: DataTableProps) {
+  const { timezone } = useTimezone();
   if (!data.length) {
     return (
       <div className="empty-state">
@@ -43,8 +41,8 @@ export function DataTable({ data }: DataTableProps) {
           {data.map((d) => (
             <tr key={d.id}>
               <td>{d.serial_number}</td>
-              <td>{formatLocal(d.timestamp)}</td>
-              <td>{formatLocal(d.server_received_at)}</td>
+              <td>{formatInTimezone(d.timestamp, timezone)}</td>
+              <td>{formatInTimezone(d.server_received_at, timezone)}</td>
               <td>
                 <span
                   className={`badge ${d.mode === "EMERGENCY" ? "badge-emergency" : "badge-normal"}`}

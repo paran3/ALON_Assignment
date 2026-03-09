@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { TimezoneProvider } from "./components/TimezoneProvider";
 import { Layout } from "./components/Layout";
 import { SensorsPage } from "./pages/SensorsPage";
 import { SensorDataPage } from "./pages/SensorDataPage";
@@ -18,6 +19,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
+        <TimezoneProvider>
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
@@ -27,6 +29,7 @@ export default function App() {
             </Route>
           </Routes>
         </BrowserRouter>
+        </TimezoneProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
