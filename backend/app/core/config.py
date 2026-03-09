@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     # 상태 판별 허용 오차 (초)
     HEALTH_TOLERANCE_SECONDS: int = 30
 
+    # 가상 센서 시뮬레이터 URL (빈 문자열이면 동기화 비활성)
+    SENSOR_SIMULATOR_URL: str = ""
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 

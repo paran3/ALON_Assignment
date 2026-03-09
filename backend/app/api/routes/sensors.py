@@ -1,9 +1,12 @@
+import logging
 from datetime import datetime, timezone
 
+import httpx
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db
+from app.core.config import settings
 from app.core.exceptions import SensorAlreadyExistsError, SensorNotFoundError
 from app.crud import create_sensor, get_all_sensors, get_sensor, update_sensor_mode
 from app.models import Sensor, SensorStatus
@@ -15,6 +18,8 @@ from app.schemas import (
     format_utc,
 )
 from app.services.health_checker import compute_sensor_status
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -89,4 +94,16 @@ async def change_sensor_mode(
     if sensor is None:
         raise SensorNotFoundError(serial_number)
     await db.commit()
+
+    # 센서 시뮬레이터 동기화 (실패해도 무시)
+    if settings.SENSOR_SIMULATOR_URL:
+        try:
+            async with httpx.AsyncClient(timeout=5) as client:
+                await client.patch(
+                    f"{settings.SENSOR_SIMULATOR_URL}/sensors/{serial_number}/mode",
+                    json={"mode": body.mode.value},
+                )
+        except Exception as e:
+            logger.warning("센서 시뮬레이터 동기화 실패: %s", e)
+
     return _sensor_to_out(sensor)

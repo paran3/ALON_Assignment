@@ -85,7 +85,7 @@ backend/
   - 요청: `{ serial_number, latitude, longitude, mode(기본 NORMAL) }`
 - `GET /api/v1/sensors` — 전체 센서 목록 + 상태
 - `GET /api/v1/sensors/{serial_number}` — 단일 센서 상세
-- `PATCH /api/v1/sensors/{serial_number}/mode` — 모드 변경 (NORMAL ↔ EMERGENCY)
+- `PATCH /api/v1/sensors/{serial_number}/mode` — 모드 변경 (NORMAL ↔ EMERGENCY), 센서 시뮬레이터 동기화
 
 ### 태스크 조회
 - `GET /api/v1/tasks/{task_id}` — 백그라운드 태스크 상태 조회
@@ -111,11 +111,17 @@ backend/
 ### 4. 데이터 유효성 검증
 - 필수 필드 존재 여부, 타입 체크, 타임스탬프 파싱 가능 여부 (Pydantic)
 
+### 5. 센서 시뮬레이터 연동
+- 모드 변경 시 센서 시뮬레이터(`SENSOR_SIMULATOR_URL`)에 httpx로 동기화
+- `SENSOR_SIMULATOR_URL`이 빈 문자열이면 동기화 비활성 (기본값)
+- 동기화 실패해도 백엔드 동작에 영향 없음 (fire-and-forget, 경고 로그만 기록)
+
 ## 주요 라이브러리
 - fastapi, uvicorn
 - sqlalchemy, alembic
 - pydantic, pydantic-settings
 - apscheduler
+- httpx (센서 시뮬레이터 연동)
 - python-dateutil (타임스탬프 파싱)
 
 ## 검증 방법
@@ -126,3 +132,4 @@ backend/
 5. GET sensor-data 필터링 동작 확인
 6. 타임존 혼재 데이터 → UTC 정규화 확인
 7. 데이터 미전송 → 센서 상태 MISSING 전환 확인
+8. 모드 변경 → 센서 시뮬레이터 동기화 확인 (SENSOR_SIMULATOR_URL 설정 시)
