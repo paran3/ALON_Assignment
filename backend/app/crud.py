@@ -111,6 +111,18 @@ async def update_sensor_on_data(
     return sensor
 
 
+async def update_sensor_broken(
+    db: AsyncSession, serial_number: str, broken: bool
+) -> Sensor | None:
+    sensor = await get_sensor(db, serial_number)
+    if sensor is None:
+        return None
+    sensor.broken = broken
+    sensor.updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
+    await db.flush()
+    return sensor
+
+
 # --- BackgroundTask ---
 
 

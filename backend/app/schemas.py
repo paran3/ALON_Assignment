@@ -42,6 +42,10 @@ class SensorModeUpdate(BaseModel):
     mode: SensorMode
 
 
+class SensorBrokenUpdate(BaseModel):
+    broken: bool
+
+
 # --- Response schemas ---
 
 
@@ -91,6 +95,7 @@ class SensorOut(BaseModel):
     serial_number: str
     mode: SensorMode
     status: SensorStatus
+    broken: bool
     last_received_at: str | None
     latitude: float
     longitude: float
