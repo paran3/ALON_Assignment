@@ -64,6 +64,8 @@ npm install
 npm run dev
 ```
 
+> **참고**: 현재 `src/api/client.ts`의 기본 API 주소가 배포 서버(`https://alon-iot.duckdns.org`)로 설정되어 있습니다. 로컬 백엔드에 연결하려면 해당 파일의 `BASE_URL`을 `http://localhost:9000`으로 변경하거나, 환경 변수 `VITE_API_URL=http://localhost:9000`을 설정하세요.
+
 ### Docker
 ```bash
 docker build -t iot-frontend .
