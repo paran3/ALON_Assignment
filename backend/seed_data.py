@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 import aiohttp
 
-BASE_URL = "http://localhost:8000/api/v1"
+BASE_URL = "http://localhost:9000/api/v1"
 
 SENSORS = [
     {"serial_number": "SN-SEOUL-001", "latitude": 37.5665, "longitude": 126.9780, "mode": "NORMAL"},

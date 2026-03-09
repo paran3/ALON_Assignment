@@ -92,8 +92,8 @@ sensor/
 
 | 환경변수 | 기본값 | 설명 |
 |---|---|---|
-| BACKEND_URL | http://127.0.0.1:8000 | 백엔드 서버 주소 |
-| SENSOR_PORT | 8001 | 센서 시뮬레이터 포트 |
+| BACKEND_URL | http://127.0.0.1:9000 | 백엔드 서버 주소 |
+| SENSOR_PORT | 9001 | 센서 시뮬레이터 포트 |
 | NORMAL_INTERVAL | 600 | NORMAL 모드 전송 주기 (초) |
 | EMERGENCY_INTERVAL | 10 | EMERGENCY 모드 전송 주기 (초) |
 

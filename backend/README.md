@@ -22,7 +22,7 @@
 | 변수 | 기본값 | 설명 |
 |------|--------|------|
 | `DATABASE_URL` | `sqlite+aiosqlite:///./iot_monitoring.db` | DB 접속 URL |
-| `SENSOR_SIMULATOR_URL` | `http://sensor:8001` | 센서 시뮬레이터 URL (설정 시 모드 변경 양방향 동기화) |
+| `SENSOR_SIMULATOR_URL` | `http://sensor:9001` | 센서 시뮬레이터 URL (설정 시 모드 변경 양방향 동기화) |
 
 ## 실행 방법
 
@@ -39,7 +39,7 @@ uvicorn app.main:app --reload
 ```bash
 cd backend
 docker build -t iot-backend .
-docker run -p 8000:8000 iot-backend
+docker run -p 9000:9000 iot-backend
 ```
 
 ### Docker Compose (백엔드 + 센서 시뮬레이터)
@@ -67,8 +67,8 @@ docker compose down
 # 중지 + 볼륨 삭제 (DB 초기화)
 docker compose down -v
 ```
-- 백엔드: http://localhost:8000
-- 센서 시뮬레이터: http://localhost:8001
+- 백엔드: http://localhost:9000
+- 센서 시뮬레이터: http://localhost:9001
 - 양방향 모드 동기화 자동 설정
 
-API 문서: http://localhost:8000/docs
+API 문서: http://localhost:9000/docs

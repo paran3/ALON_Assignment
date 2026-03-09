@@ -52,7 +52,7 @@ App (TimezoneProvider)
 ## 환경 변수
 | 변수 | 기본값 | 설명 |
 |------|--------|------|
-| `VITE_API_URL` | `http://localhost:8000` | 백엔드 API 서버 주소 |
+| `VITE_API_URL` | `http://localhost:9000` | 백엔드 API 서버 주소 |
 
 ## 실행 방법
 

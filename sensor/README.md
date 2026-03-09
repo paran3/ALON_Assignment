@@ -28,14 +28,14 @@
 ```bash
 cd sensor
 pip install -r requirements.txt
-BACKEND_URL=http://127.0.0.1:8000 python main.py
+BACKEND_URL=http://127.0.0.1:9000 python main.py
 ```
 
 ### Docker (단독)
 ```bash
 cd sensor
 docker build -t iot-sensor .
-docker run -e BACKEND_URL=http://host.docker.internal:8000 -p 8001:8001 iot-sensor
+docker run -e BACKEND_URL=http://host.docker.internal:9000 -p 9001:9001 iot-sensor
 ```
 
 ### Docker Compose (백엔드 + 센서 시뮬레이터)
@@ -69,8 +69,8 @@ docker compose down -v
 
 | 변수 | 기본값 | 설명 |
 |------|--------|------|
-| `BACKEND_URL` | `http://backend:8000` | 백엔드 서버 주소 |
-| `SENSOR_PORT` | `8001` | 시뮬레이터 포트 |
+| `BACKEND_URL` | `http://backend:9000` | 백엔드 서버 주소 |
+| `SENSOR_PORT` | `9001` | 시뮬레이터 포트 |
 | `NORMAL_INTERVAL` | `600` | NORMAL 모드 전송 주기 (초) |
 | `EMERGENCY_INTERVAL` | `10` | EMERGENCY 모드 전송 주기 (초) |
 | `BULK_COUNT` | `10` | 벌크 전송 시 모아서 보낼 데이터 건수 |
