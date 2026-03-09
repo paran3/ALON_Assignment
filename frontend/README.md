@@ -6,7 +6,7 @@
 - **서버 상태 관리**: TanStack Query (5초 간격 자동 리페치)
 - **라우팅**: React Router v7
 - **차트**: Recharts
-- **시간 처리**: date-fns (UTC → 브라우저 로컬 타임존 변환)
+- **시간 처리**: `toLocaleString` 기반 타임존 변환 (UTC → 사용자 선택 타임존)
 
 ## 주요 기능
 
@@ -14,6 +14,9 @@
 - 등록된 센서 목록을 카드 형태로 표시
 - 센서별 상태(HEALTHY/MISSING) 배지 표시
 - 모드 전환(NORMAL ↔ EMERGENCY) 토글 버튼
+- 고장 시뮬레이션 버튼 (고장 설정/해제)
+- 벌크 전송 센서 배지 표시
+- 벌크 센서 모드 변경 시 확인 팝업 (전송 방식 변경 안내)
 - 마지막 수신 시간, 좌표 등 상세 정보 표시
 
 ### 센서 데이터 조회 (Sensor Data 탭)
@@ -24,13 +27,13 @@
 
 ### UI/UX
 - **다크/라이트 모드**: CSS 변수 기반 테마 전환, localStorage 저장
+- **타임존 선택**: KST(기본), JST, ET, GMT, UTC 중 선택 가능, localStorage 저장
 - **반응형 디자인**: 데스크탑/모바일 지원
-- **브라우저 로컬 시간**: 서버에서 UTC로 받은 시간을 브라우저 타임존으로 변환하여 표시
 
 ## 컴포넌트 구조
 ```
-App
-└── Layout (헤더 + 네비게이션)
+App (TimezoneProvider)
+└── Layout (헤더 + 네비게이션 + 테마/타임존 전환)
     ├── SensorsPage
     │   └── SensorList
     │       └── SensorCard + ModeToggle
@@ -44,6 +47,7 @@ App
 - **서버 상태**: TanStack Query로 관리 (캐시, 자동 리페치, 뮤테이션)
 - **UI 상태**: React useState (필터, 뷰 모드 등)
 - **테마 상태**: React Context + localStorage
+- **타임존 상태**: React Context (TimezoneProvider) + localStorage
 
 ## 환경 변수
 | 변수 | 기본값 | 설명 |

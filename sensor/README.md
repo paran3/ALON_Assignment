@@ -6,6 +6,7 @@
 - 센서 5개가 서버 시작 시 백엔드에 자동 등록 후 주기적 데이터 전송
 - NORMAL 모드: 10분 간격, EMERGENCY 모드: 10초 간격
 - 타임존 혼재 재현 (서울/부산 → KST `+09:00`, 나머지 → UTC `Z`)
+- **벌크 전송**: 일부 센서는 1분 간격으로 여러 건을 모아 배열로 한 번에 전송 (EMERGENCY 모드 시 1건 단일 전송으로 자동 전환)
 - 모드 변경 API (백엔드 동기화 + 전송 주기 자동 변경)
 - 고장 시뮬레이션 API (데이터 전송 중단 → 백엔드에서 MISSING 감지)
 
@@ -72,3 +73,4 @@ docker compose down -v
 | `SENSOR_PORT` | `8001` | 시뮬레이터 포트 |
 | `NORMAL_INTERVAL` | `600` | NORMAL 모드 전송 주기 (초) |
 | `EMERGENCY_INTERVAL` | `10` | EMERGENCY 모드 전송 주기 (초) |
+| `BULK_COUNT` | `10` | 벌크 전송 시 모아서 보낼 데이터 건수 |
