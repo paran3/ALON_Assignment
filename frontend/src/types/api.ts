@@ -45,6 +45,7 @@ export interface SensorData {
   timestamp: string;
   server_received_at: string;
   mode: SensorMode;
+  status: SensorStatus;
   metrics: Metrics;
   location: Location;
 }

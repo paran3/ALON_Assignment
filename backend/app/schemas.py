@@ -72,6 +72,7 @@ class SensorDataOut(BaseModel):
     timestamp: str
     server_received_at: str
     mode: SensorMode
+    status: SensorStatus
     metrics: MetricsOut
     location: LocationOut
 

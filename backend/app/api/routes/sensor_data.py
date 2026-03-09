@@ -2,11 +2,11 @@ import asyncio
 import uuid
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db
-from app.crud import create_background_task, get_sensor_data
+from app.crud import create_background_task, get_sensor, get_sensor_data
 from app.models import SensorMode
 from app.schemas import (
     LocationOut,
@@ -19,6 +19,7 @@ from app.schemas import (
     format_utc,
 )
 from app.services.data_ingestion import process_sensor_data
+from app.services.health_checker import compute_sensor_status
 
 router = APIRouter()
 
@@ -30,7 +31,7 @@ async def receive_sensor_data(
 ):
     items = payload if isinstance(payload, list) else [payload]
     if not items:
-        return TaskAccepted(task_id="", message="No data to process")
+        raise HTTPException(status_code=400, detail="빈 데이터 배열은 허용되지 않습니다.")
 
     task_id = str(uuid.uuid4())
 
@@ -67,23 +68,35 @@ async def list_sensor_data(
 
     total_pages = max(1, (total + limit - 1) // limit)
 
-    items = [
-        SensorDataOut(
-            id=d.id,
-            serial_number=d.serial_number,
-            timestamp=format_utc(d.timestamp),
-            server_received_at=format_utc(d.created_at),
-            mode=d.mode,
-            metrics=MetricsOut(
-                temperature=d.temperature,
-                humidity=d.humidity,
-                pressure=d.pressure,
-                air_quality=d.air_quality,
-            ),
-            location=LocationOut(lat=d.latitude, lng=d.longitude),
+    # 센서별 상태 캐시 (같은 센서의 데이터가 여러 건일 때 중복 조회 방지)
+    sensor_status_cache: dict[str, str] = {}
+
+    items = []
+    for d in data_list:
+        if d.serial_number not in sensor_status_cache:
+            sensor = await get_sensor(db, d.serial_number)
+            if sensor:
+                sensor_status_cache[d.serial_number] = compute_sensor_status(sensor)
+            else:
+                sensor_status_cache[d.serial_number] = "MISSING"
+
+        items.append(
+            SensorDataOut(
+                id=d.id,
+                serial_number=d.serial_number,
+                timestamp=format_utc(d.timestamp),
+                server_received_at=format_utc(d.created_at),
+                mode=d.mode,
+                status=sensor_status_cache[d.serial_number],
+                metrics=MetricsOut(
+                    temperature=d.temperature,
+                    humidity=d.humidity,
+                    pressure=d.pressure,
+                    air_quality=d.air_quality,
+                ),
+                location=LocationOut(lat=d.latitude, lng=d.longitude),
+            )
         )
-        for d in data_list
-    ]
 
     return SensorDataListOut(
         data=items,
