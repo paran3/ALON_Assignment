@@ -25,15 +25,25 @@
 
 ### 로컬
 ```bash
+cd sensor
 pip install -r requirements.txt
-python main.py
+BACKEND_URL=http://127.0.0.1:8000 python main.py
 ```
 
-### Docker
+### Docker (단독)
 ```bash
+cd sensor
 docker build -t iot-sensor .
 docker run -e BACKEND_URL=http://host.docker.internal:8000 -p 8001:8001 iot-sensor
 ```
+
+### Docker Compose (백엔드 + 센서 시뮬레이터)
+
+프로젝트 루트에서:
+```bash
+docker compose up --build
+```
+- 백엔드와 센서 간 네트워크 자동 구성, 환경변수 자동 설정
 
 ## 환경 변수
 

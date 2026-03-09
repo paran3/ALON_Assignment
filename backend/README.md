@@ -15,6 +15,13 @@
 - NORMAL: 10분, EMERGENCY: 10초 주기 + 30초 허용치 초과 시 `MISSING` 처리
 - API 호출 없이도 고장 센서를 놓치지 않기 위한 백그라운드 검사
 
+## 환경 변수
+
+| 변수 | 기본값 | 설명 |
+|------|--------|------|
+| `DATABASE_URL` | `sqlite+aiosqlite:///./iot_monitoring.db` | DB 접속 URL |
+| `SENSOR_SIMULATOR_URL` | (빈 문자열) | 센서 시뮬레이터 URL (설정 시 모드 변경 양방향 동기화) |
+
 ## 실행 방법
 
 ### 로컬
@@ -25,12 +32,22 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-### Docker
+### Docker (단독)
 
 ```bash
 cd backend
 docker build -t iot-backend .
 docker run -p 8000:8000 iot-backend
 ```
+
+### Docker Compose (백엔드 + 센서 시뮬레이터)
+
+프로젝트 루트에서:
+```bash
+docker compose up --build
+```
+- 백엔드: http://localhost:8000
+- 센서 시뮬레이터: http://localhost:8001
+- 양방향 모드 동기화 자동 설정
 
 API 문서: http://localhost:8000/docs
