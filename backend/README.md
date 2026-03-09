@@ -1,5 +1,7 @@
 # Backend - IoT 환경 데이터 모니터링 시스템
 
+> **배포 주소**: https://alon-iot.duckdns.org/docs (Swagger UI)
+
 ## 기술 스택
 - **Framework**: FastAPI
 - **아키텍처**: [full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) 기반

@@ -1,5 +1,7 @@
 # Frontend - IoT 환경 데이터 모니터링 시스템
 
+> **배포 주소**: https://main.dypmcbje2h6zn.amplifyapp.com/
+
 ## 기술 스택
 - **Framework**: React 19 + TypeScript
 - **빌드**: Vite 7

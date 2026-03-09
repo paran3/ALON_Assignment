@@ -1,5 +1,10 @@
 # IoT 환경 데이터 모니터링 시스템
 
+## 배포 주소
+
+- **프론트엔드**: https://main.dypmcbje2h6zn.amplifyapp.com/
+- **백엔드 API 문서 (Swagger)**: https://alon-iot.duckdns.org/docs
+
 ## 과제 리뷰 노트
 
 본 과제는 **Claude Code (Opus 4.6 모델)** 를 활용하여 개발했습니다. 각 디렉토리별로 작업을 시작하기 전에 `plan.md`를 먼저 작성하여 설계 방향과 구현 범위를 정리한 뒤, 계획에 따라 구현을 진행했습니다.
